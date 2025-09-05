@@ -61,6 +61,12 @@ cd backend
 npm install
 node server.js
 ```
+##for running
+```bash
+cd..
+npm run dev
+```
+#then go to localhost:3000
 
 👉 **Backend API will run on**: http://localhost:5000
 
