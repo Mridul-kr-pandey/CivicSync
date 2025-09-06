@@ -64,13 +64,9 @@ const createDispute = async (req, res) => {
 
     await dispute.save();
 
-    // Send email notification to partner
-    try {
-      const againstUser = await User.findById(againstId);
-      await sendDisputeEmail(againstUser, dispute);
-    } catch (emailError) {
-      console.error('Dispute email failed:', emailError);
-    }
+    // Send email notification to partner (disabled)
+    const againstUser = await User.findById(againstId);
+    await sendDisputeEmail(againstUser, dispute);
 
     res.status(201).json({
       message: 'Dispute created successfully',

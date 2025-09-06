@@ -73,12 +73,8 @@ const sendRequest = async (req, res) => {
     // Populate requester details for notification
     await connection.populate('requester', 'name avatar skills goals bio');
 
-    // Send email notification
-    try {
-      await sendConnectionRequestEmail(recipient, connection.requester);
-    } catch (emailError) {
-      console.error('Connection request email failed:', emailError);
-    }
+    // Send email notification (disabled)
+    await sendConnectionRequestEmail(recipient, connection.requester);
 
     // Send real-time notification
     const io = req.app.get('io');

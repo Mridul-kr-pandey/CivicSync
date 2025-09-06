@@ -63,13 +63,45 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(require('path').join(__dirname, 'uploads')));
 
 // Database connection
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/accountability_partner")
-  .then(() => console.log('✅ Connected to MongoDB'))
-  .catch(err => {
+const connectDB = async () => {
+  try {
+    const mongoURI = process.env.MONGODB_URI || "mongodb://localhost:27017/accountability_partner";
+    
+    // Connection options for better reliability
+    const options = {
+      maxPoolSize: 10, // Maintain up to 10 socket connections
+      serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
+      socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+    };
+
+    await mongoose.connect(mongoURI, options);
+    console.log('✅ Connected to MongoDB');
+    console.log(`📊 Database: ${mongoose.connection.name}`);
+    console.log(`🌐 Host: ${mongoose.connection.host}`);
+    
+    // Handle connection events
+    mongoose.connection.on('error', (err) => {
+      console.error('❌ MongoDB connection error:', err);
+    });
+    
+    mongoose.connection.on('disconnected', () => {
+      console.log('⚠️ MongoDB disconnected');
+    });
+    
+    mongoose.connection.on('reconnected', () => {
+      console.log('🔄 MongoDB reconnected');
+    });
+    
+  } catch (err) {
     console.error('❌ MongoDB connection error:', err);
     console.error('🔍 Check MONGODB_URI environment variable');
+    console.error('💡 Make sure your .env file is properly configured');
     // Don't exit - let the server start and retry connection
-  });
+  }
+};
+
+// Connect to database
+connectDB();
 
 // Socket.io connection handling
 io.on('connection', (socket) => {

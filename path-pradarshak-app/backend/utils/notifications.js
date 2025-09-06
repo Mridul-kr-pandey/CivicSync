@@ -1,113 +1,34 @@
-const nodemailer = require('nodemailer');
+// Email functionality has been removed
+// All email-related functions are now no-op functions to prevent errors
 
-// Email transporter setup
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: process.env.SMTP_PORT,
-  secure: false,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS
-  }
-});
-
-// Send email notification
-const sendEmail = async (to, subject, html, text = '') => {
-  try {
-    const mailOptions = {
-      from: process.env.SMTP_USER,
-      to,
-      subject,
-      html,
-      text
-    };
-
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Email sent:', info.messageId);
-    return info;
-  } catch (error) {
-    console.error('Email sending error:', error);
-    throw new Error('Failed to send email');
-  }
-};
-
-// Send welcome email
+// Send welcome email (no-op)
 const sendWelcomeEmail = async (user) => {
-  const subject = 'Welcome to Accountability Partner!';
-  const html = `
-    <h1>Welcome ${user.name}!</h1>
-    <p>Thank you for joining Accountability Partner. We're excited to help you achieve your goals!</p>
-    <p>Get started by:</p>
-    <ul>
-      <li>Completing your profile</li>
-      <li>Finding an accountability partner</li>
-      <li>Setting up your first agreement</li>
-    </ul>
-    <p>Best regards,<br>The Accountability Partner Team</p>
-  `;
-
-  return sendEmail(user.email, subject, html);
+  console.log(`Welcome email would be sent to ${user.name} (${user.email}) - Email functionality disabled`);
+  return Promise.resolve();
 };
 
-// Send connection request email
+// Send connection request email (no-op)
 const sendConnectionRequestEmail = async (recipient, requester) => {
-  const subject = 'New Accountability Partner Request';
-  const html = `
-    <h2>You have a new accountability partner request!</h2>
-    <p><strong>${requester.name}</strong> wants to be your accountability partner.</p>
-    <p>Skills: ${requester.skills.join(', ')}</p>
-    <p>Goals: ${requester.goals.join(', ')}</p>
-    <p>Login to your account to accept or reject this request.</p>
-    <p>Best regards,<br>The Accountability Partner Team</p>
-  `;
-
-  return sendEmail(recipient.email, subject, html);
+  console.log(`Connection request email would be sent to ${recipient.name} (${recipient.email}) - Email functionality disabled`);
+  return Promise.resolve();
 };
 
-// Send progress reminder email
+// Send progress reminder email (no-op)
 const sendProgressReminderEmail = async (user, agreement) => {
-  const subject = 'Daily Progress Check-in Reminder';
-  const html = `
-    <h2>Time for your daily check-in!</h2>
-    <p>Hi ${user.name},</p>
-    <p>Don't forget to submit your daily progress for your accountability agreement:</p>
-    <p><strong>Goal:</strong> ${agreement.what}</p>
-    <p>Submit your progress now to avoid penalties!</p>
-    <p>Best regards,<br>The Accountability Partner Team</p>
-  `;
-
-  return sendEmail(user.email, subject, html);
+  console.log(`Progress reminder email would be sent to ${user.name} (${user.email}) - Email functionality disabled`);
+  return Promise.resolve();
 };
 
-// Send penalty notification email
+// Send penalty notification email (no-op)
 const sendPenaltyEmail = async (user, amount, reason) => {
-  const subject = 'Penalty Applied - Accountability Partner';
-  const html = `
-    <h2>Penalty Applied</h2>
-    <p>Hi ${user.name},</p>
-    <p>A penalty of ₹${amount} has been applied to your account.</p>
-    <p><strong>Reason:</strong> ${reason}</p>
-    <p>Please ensure you submit your progress on time to avoid further penalties.</p>
-    <p>Best regards,<br>The Accountability Partner Team</p>
-  `;
-
-  return sendEmail(user.email, subject, html);
+  console.log(`Penalty email would be sent to ${user.name} (${user.email}) - Email functionality disabled`);
+  return Promise.resolve();
 };
 
-// Send dispute notification email
+// Send dispute notification email (no-op)
 const sendDisputeEmail = async (user, dispute) => {
-  const subject = 'Dispute Filed - Accountability Partner';
-  const html = `
-    <h2>Dispute Filed</h2>
-    <p>Hi ${user.name},</p>
-    <p>A dispute has been filed regarding your accountability agreement.</p>
-    <p><strong>Type:</strong> ${dispute.type}</p>
-    <p><strong>Title:</strong> ${dispute.title}</p>
-    <p>Our admin team will review this dispute and get back to you soon.</p>
-    <p>Best regards,<br>The Accountability Partner Team</p>
-  `;
-
-  return sendEmail(user.email, subject, html);
+  console.log(`Dispute email would be sent to ${user.name} (${user.email}) - Email functionality disabled`);
+  return Promise.resolve();
 };
 
 // Real-time notification via Socket.io
@@ -140,7 +61,6 @@ const sendConnectionRequestNotification = (io, recipientId, requesterData) => {
 };
 
 module.exports = {
-  sendEmail,
   sendWelcomeEmail,
   sendConnectionRequestEmail,
   sendProgressReminderEmail,
@@ -150,5 +70,3 @@ module.exports = {
   sendProgressUpdateNotification,
   sendConnectionRequestNotification
 };
-
-
