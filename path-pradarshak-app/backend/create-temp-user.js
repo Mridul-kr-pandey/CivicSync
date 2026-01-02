@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('./models/User');
 
-const uri = 'mongodb://localhost:27017/accountability_partner';
+const uri = 'mongodb://127.0.0.1:27017/civicsync_db';
 
 async function createTempUser() {
     try {

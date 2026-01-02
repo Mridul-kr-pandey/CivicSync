@@ -6,6 +6,7 @@ const rateLimit = require('express-rate-limit');
 const http = require('http');
 const socketIo = require('socket.io');
 require('dotenv').config({ path: require('path').join(__dirname, '.env') });
+const passport = require('./config/passport');
 
 const authRoutes = require('./routes/auth');
 const profileRoutes = require('./routes/profile');
@@ -67,7 +68,7 @@ app.use('/uploads', express.static(require('path').join(__dirname, 'uploads')));
 const connectDB = async () => {
   try {
     const mongoURI = process.env.MONGODB_URI || "mongodb://localhost:27017/accountability_partner";
-    
+
     // Connection options for better reliability
     const options = {
       maxPoolSize: 10, // Maintain up to 10 socket connections
@@ -79,20 +80,20 @@ const connectDB = async () => {
     console.log('✅ Connected to MongoDB');
     console.log(`📊 Database: ${mongoose.connection.name}`);
     console.log(`🌐 Host: ${mongoose.connection.host}`);
-    
+
     // Handle connection events
     mongoose.connection.on('error', (err) => {
       console.error('❌ MongoDB connection error:', err);
     });
-    
+
     mongoose.connection.on('disconnected', () => {
       console.log('⚠️ MongoDB disconnected');
     });
-    
+
     mongoose.connection.on('reconnected', () => {
       console.log('🔄 MongoDB reconnected');
     });
-    
+
   } catch (err) {
     console.error('❌ MongoDB connection error:', err);
     console.error('🔍 Check MONGODB_URI environment variable');

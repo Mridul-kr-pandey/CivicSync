@@ -51,8 +51,8 @@ const createIssue = async (req, res) => {
     // Handle image uploads
     if (req.files && req.files.length > 0) {
       issueData.images = req.files.map(file => ({
-        url: `/uploads/issues/${file.filename}`,
-        filename: file.filename
+        url: file.path, // Cloudinary URL
+        filename: file.filename // Cloudinary Public ID
       }));
     }
 
@@ -386,7 +386,7 @@ const toggleUpvote = async (req, res) => {
     }
 
     const hasUpvoted = issue.upvotes.includes(req.user.id);
-    
+
     if (hasUpvoted) {
       await issue.removeUpvote(req.user.id);
     } else {
