@@ -4,10 +4,10 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import Navigation from "@/components/Navigation";
-import { 
-  Camera, 
-  MapPin, 
-  AlertTriangle, 
+import {
+  Camera,
+  MapPin,
+  AlertTriangle,
   Upload,
   X,
   CheckCircle
@@ -16,7 +16,7 @@ import {
 export default function ReportIssuePage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -24,7 +24,7 @@ export default function ReportIssuePage() {
     location: "",
     priority: "medium"
   });
-  
+
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -69,7 +69,7 @@ export default function ReportIssuePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
       // Check if user is authenticated
       if (!user) {
@@ -79,19 +79,19 @@ export default function ReportIssuePage() {
       }
 
       const formDataToSend = new FormData();
-      
+
       // Add form fields
       formDataToSend.append('title', formData.title);
       formDataToSend.append('description', formData.description);
       formDataToSend.append('category', formData.category);
       formDataToSend.append('location', formData.location);
       formDataToSend.append('priority', formData.priority);
-      
+
       // Add image if selected
       if (selectedImage) {
         formDataToSend.append('images', selectedImage);
       }
-      
+
       // Get user's location if available
       if (navigator.geolocation) {
         try {
@@ -106,7 +106,7 @@ export default function ReportIssuePage() {
           console.log('Geolocation not available or denied');
         }
       }
-      
+
       // Get token from localStorage or use the user object
       const token = localStorage.getItem('accessToken');
       if (!token) {
@@ -114,7 +114,7 @@ export default function ReportIssuePage() {
         router.push('/auth/login');
         return;
       }
-      
+
       const response = await fetch('/api/issues', {
         method: 'POST',
         headers: {
@@ -122,12 +122,12 @@ export default function ReportIssuePage() {
         },
         body: formDataToSend
       });
-      
+
       const result = await response.json();
-      
+
       if (result.success) {
         setSubmitSuccess(true);
-        
+
         // Reset form after success
         setTimeout(() => {
           setFormData({
@@ -146,7 +146,7 @@ export default function ReportIssuePage() {
       }
     } catch (error) {
       console.error('Error submitting issue:', error);
-      if (error.message.includes('Invalid token') || error.message.includes('Token expired')) {
+      if ((error as any).message?.includes('Invalid token') || (error as any).message?.includes('Token expired')) {
         alert('Your session has expired. Please log in again.');
         router.push('/auth/login');
       } else {
@@ -208,7 +208,7 @@ export default function ReportIssuePage() {
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       <div className="h-16"></div>
-      
+
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -234,7 +234,7 @@ export default function ReportIssuePage() {
               Help us improve your city
             </h2>
             <p className="text-gray-600">
-              Report civic issues like potholes, broken street lights, garbage problems, and more. 
+              Report civic issues like potholes, broken street lights, garbage problems, and more.
               Your report will be reviewed by municipal staff and tracked until resolution.
             </p>
           </div>

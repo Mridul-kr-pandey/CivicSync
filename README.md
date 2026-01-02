@@ -14,16 +14,14 @@ A modern civic engagement platform built with Next.js and Node.js, designed to c
 
 ```
 CivicSync/
-├── frontend/          # Next.js application
-│   ├── src/
-│   │   └── app/       # App router pages
-│   ├── public/        # Static assets
-│   └── package.json
-├── backend/           # Express.js API server
-│   ├── controllers/   # Route controllers
-│   ├── models/        # Database models
-│   ├── routes/        # API routes
-│   ├── src/           # Source code
+├── path-pradarshak-app/   # Next.js Frontend
+│   ├── app/               # App router pages
+│   ├── components/        # UI Components
+│   ├── backend/           # Express.js Backend
+│   │   ├── controllers/   # Route controllers
+│   │   ├── models/        # Database models
+│   │   ├── routes/        # API routes
+│   │   └── server.js      # Server entry point
 │   └── package.json
 └── README.md
 ```
@@ -33,9 +31,8 @@ CivicSync/
 ### Prerequisites
 
 - Node.js (v18 or higher)
-- npm or yarn
-- MongoDB (local or cloud instance)
-- Gmail account for SMTP
+- MongoDB (running locally on port 27017)
+- Google/GitHub OAuth credentials (optional, for social login)
 
 ### 1️⃣ Clone the Repository
 
@@ -44,7 +41,37 @@ git clone https://github.com/Mridul-kr-pandey/CivicSync.git
 cd CivicSync
 ```
 
-### 2️⃣ Frontend Setup (Next.js + Tailwind)
+### 2️⃣ Backend Setup
+
+```bash
+cd path-pradarshak-app/backend
+npm install
+```
+
+**Configuration**: Create a `.env` file in `path-pradarshak-app/backend/` with:
+
+```env
+PORT=5000
+MONGODB_URI=mongodb://localhost:27017/accountability_partner
+FRONTEND_URL=http://localhost:3000
+JWT_SECRET=your_jwt_secret_key
+
+# Optional: Social Login Credentials
+GOOGLE_CLIENT_ID=your_id
+GOOGLE_CLIENT_SECRET=your_secret
+GITHUB_CLIENT_ID=your_id
+GITHUB_CLIENT_SECRET=your_secret
+```
+
+**Run Server**:
+```bash
+npm run dev
+# Server runs on http://localhost:5000
+```
+
+### 3️⃣ Frontend Setup
+
+Open a new terminal:
 
 ```bash
 cd path-pradarshak-app
@@ -52,36 +79,6 @@ npm install
 npm run dev
 ```
 
-👉 **Frontend will be available at**: http://localhost:3000
+👉 **Application will be available at**: http://localhost:3000
 
-### 3️⃣ Backend Setup (Node.js + Express + MongoDB)
-
-```bash
-cd backend
-npm install
-node server.js
-```
-##for running
-```bash
-cd..
-npm run dev
-```
-#then go to localhost:3000
-
-👉 **Backend API will run on**: http://localhost:5000
-
-## ⚙️ Environment Configuration
-
-### Backend Environment Variables
-
-Create a `.env` file in the `backend/` directory:
-
-```env
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/civicsync
-JWT_SECRET=1a2b05a328d4117ed991c5afdfa487204a70b9bce2aac8d1fa73eb2bdcf8f7d1a4f5b8a7533e4dfebd0a8d8769d9fe82125f208a927b8045f0372f0ccc14420b
-```
-
-#for running the project move to folder path-pradarshak-app
-npm run dev
 

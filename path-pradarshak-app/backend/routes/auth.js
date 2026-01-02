@@ -26,7 +26,38 @@ router.post('/logout', authenticateToken, authController.logout);
 router.get('/me', authenticateToken, authController.getCurrentUser);
 
 // OAuth routes (placeholders)
-router.post('/google', authController.googleAuth);
+const passport = require('passport');
+const { generateTokens } = require('../middleware/auth');
+
+// OAuth routes
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get('/google/callback',
+  passport.authenticate('google', { failureRedirect: process.env.FRONTEND_URL + '/auth/login?error=google_auth_failed', session: false }),
+  (req, res) => {
+    // Generate tokens
+    const { accessToken, refreshToken } = generateTokens(req.user._id);
+    req.user.refreshToken = refreshToken;
+    req.user.save();
+
+    // Redirect to frontend with token
+    res.redirect(`${process.env.FRONTEND_URL}/auth/social-callback?token=${accessToken}&refreshToken=${refreshToken}`);
+  }
+);
+
+router.get('/github', passport.authenticate('github', { scope: ['user:email'] }));
+router.get('/github/callback',
+  passport.authenticate('github', { failureRedirect: process.env.FRONTEND_URL + '/auth/login?error=github_auth_failed', session: false }),
+  (req, res) => {
+    // Generate tokens
+    const { accessToken, refreshToken } = generateTokens(req.user._id);
+    req.user.refreshToken = refreshToken;
+    req.user.save();
+
+    // Redirect to frontend with token
+    res.redirect(`${process.env.FRONTEND_URL}/auth/social-callback?token=${accessToken}&refreshToken=${refreshToken}`);
+  }
+);
+
 router.post('/send-otp', authController.sendOTP);
 router.post('/verify-otp', authController.verifyOTP);
 

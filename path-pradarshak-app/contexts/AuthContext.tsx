@@ -17,6 +17,24 @@ interface User {
   phone?: string
   isAdmin: boolean
   isVerified: boolean
+  role: 'citizen' | 'official' | 'admin'
+  department?: {
+    name: string
+    code: string
+  }
+  stats?: {
+    reportsCount: number
+    actionsTaken: number
+    communityLevel: number
+    points: number
+  }
+  badges?: Array<{
+    name: string
+    tier: 'bronze' | 'silver' | 'gold' | 'platinum'
+    description: string
+    icon: string
+    earnedAt: string
+  }>
   createdAt: string
 }
 

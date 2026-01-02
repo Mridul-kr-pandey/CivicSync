@@ -59,6 +59,7 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize()); // Initialize Passport
 // Serve uploads statically
 app.use('/uploads', express.static(require('path').join(__dirname, 'uploads')));
 
@@ -128,10 +129,10 @@ console.log(`📱 Frontend URL: ${process.env.FRONTEND_URL || 'Not set'}`);
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server successfully started on port ${PORT}`);
   console.log(`🔌 Listening on 0.0.0.0:${PORT}`);
-  
+
   const maskedKey = (process.env.RAZORPAY_KEY_ID || '').slice(0, 8) || 'unset';
   console.log(`💳 Razorpay key: ${maskedKey}...`);
-  
+
   // Start penalty scheduler
   schedulePenaltyChecks();
   console.log(`✅ Server is ready to accept requests`);
