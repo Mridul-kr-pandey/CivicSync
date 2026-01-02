@@ -30,12 +30,8 @@ const register = async (req, res) => {
     user.refreshToken = refreshToken;
     await user.save();
 
-    // Send welcome email
-    try {
-      await sendWelcomeEmail(user);
-    } catch (emailError) {
-      console.error('Welcome email failed:', emailError);
-    }
+    // Send welcome email (disabled)
+    await sendWelcomeEmail(user);
 
     // Return user data (without password)
     const userResponse = user.toPublicJSON();
